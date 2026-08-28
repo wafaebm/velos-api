@@ -91,3 +91,16 @@ def disponibilite():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", "8000"))
     app.run(host="0.0.0.0", port=port)
+
+
+@app.get("/alertes")
+def alertes():
+    donnees, source = lire_stations()
+    stations_alerte = [
+        s for s in donnees
+        if s["velos_disponibles"] <= 2
+    ]
+    return jsonify({
+        "source": source,
+        "stations": stations_alerte
+    })
